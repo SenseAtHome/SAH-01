@@ -15,7 +15,6 @@ esphome:
   - priority: 900.0
     then:
       - lambda: |-
-          id(cpu_speed) = ESP.getCpuFreqMHz();
           id(radar_bluetooth).turn_off();
 
   project:
@@ -28,18 +27,11 @@ esphome:
 esp32:
   board: esp32-c3-devkitm-1
   framework:
-    type: arduino
-    version: recommended
+    type: esp-idf
 
 dashboard_import:
   package_import_url: github://SenseAtHome/SAH-01/code/SAH-01.yaml
   import_full_config: False
-
-globals:
-  - id: cpu_speed
-    type: int
-    restore_value: no
-    initial_value: "0"
 
 # Enable Home Assistant API
 api:
@@ -154,22 +146,6 @@ ld2410:
   id: ld2410_radar
 
 sensor:
-  - platform: template
-    name: "ESP Cpu Speed"
-    accuracy_decimals: 0
-    unit_of_measurement: Mhz
-    lambda: |-
-      return (id(cpu_speed));
-    entity_category: "diagnostic"
-
-  - platform: template
-    id: sys_esp_temperature
-    name: ESP Temperature
-    lambda: return temperatureRead();
-    unit_of_measurement: °C
-    device_class: TEMPERATURE
-    update_interval: 60s
-
   - platform: uptime
     name: Uptime
     id: sys_uptime
